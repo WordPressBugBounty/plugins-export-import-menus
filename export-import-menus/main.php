@@ -4,7 +4,7 @@ Plugin Name: Export Import Menus
 Plugin URI: https://in.linkedin.com/in/akshay-menariya-5218a664
 Description: Plugin to export and import WordPress Menus. This plugin also support UberMenu plugin.
 Author: Akshay Menariya
-Version: 1.9.1
+Version: 1.9.2
 Author URI: https://profiles.wordpress.org/akshay-menariya
 */
 if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -106,7 +106,7 @@ include ("constants.php");
 */
 			public function createAdminMenu()
 			{
-						add_theme_page( 'Export/Import Menus', 'Export/Import Menus', 'manage_options', 'dsp_export_import_menus',  array($this,'createListMenus'));
+						add_theme_page( 'Export/Import Menus', 'Export/Import Menus', 'edit_theme_options', 'dsp_export_import_menus',  array($this,'createListMenus'));
 			}
 
 /**
@@ -129,13 +129,14 @@ include ("constants.php");
 */	
 			public function dspMenusController($task=null)
 			{
-			
-				if(isset($_POST["dspmenustask"])){
-					$task=$_POST["dspmenustask"];				
-				}else{
-					$task="listMenus";				
+				if ( current_user_can( 'edit_theme_options' ) ) {
+					if(isset($_POST["dspmenustask"])){
+						$task=$_POST["dspmenustask"];				
+					}else{
+						$task="listMenus";				
+					}
+					$settings = new DspExportImportController($task);
 				}
-				$settings = new DspExportImportController($task);
 			}
 			
 /**
